@@ -1,0 +1,29 @@
+apiVersion: v1  # Menggunakan API versi 1 untuk resource PersistentVolume (PV)
+kind: PersistentVolume  # Menentukan bahwa ini adalah resource PersistentVolume (PV)
+
+metadata:
+  name: mongo-pv  # Nama PersistentVolume yang akan digunakan dalam Kubernetes
+
+spec:
+  capacity:
+    storage: 1Gi  # Menentukan kapasitas penyimpanan sebesar 1GiB untuk MongoDB
+
+  accessModes:
+    - ReadWriteOnce  # Volume hanya dapat di-mount oleh satu node dalam satu waktu
+
+  hostPath:
+    path: "/mnt/data"  # Lokasi penyimpanan data MongoDB di dalam cluster (hanya untuk lingkungan non-cloud)
+---
+apiVersion: v1  # Menggunakan API versi 1 untuk resource PersistentVolumeClaim (PVC)
+kind: PersistentVolumeClaim  # Menentukan bahwa ini adalah resource PersistentVolumeClaim (PVC)
+
+metadata:
+  name: mongo-pvc  # Nama PersistentVolumeClaim yang akan digunakan untuk mengklaim storage
+
+spec:
+  accessModes:
+    - ReadWriteOnce  # Sama seperti PV, hanya dapat diakses oleh satu node dalam satu waktu
+
+  resources:
+    requests:
+      storage: 1Gi  # Meminta penyimpanan sebesar 1GiB sesuai dengan kapasitas PV

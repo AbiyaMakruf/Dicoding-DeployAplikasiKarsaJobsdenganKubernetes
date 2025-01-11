@@ -1,0 +1,15 @@
+apiVersion: v1  # Menggunakan API versi 1 untuk resource Service
+kind: Service  # Menentukan bahwa ini adalah resource Service
+
+metadata:
+  name: mongo  # Nama Service yang akan digunakan dalam Kubernetes
+
+spec:
+  selector:
+    app: mongo  # Selector untuk mencocokkan label Pod yang akan dilayani oleh Service ini
+
+  ports:
+    - port: 27017  # Port yang diekspos dalam cluster
+      targetPort: 27017  # Port yang digunakan oleh container MongoDB di dalam Pod
+
+  type: ClusterIP  # Hanya dapat diakses dari dalam cluster, tidak dapat diakses dari luar

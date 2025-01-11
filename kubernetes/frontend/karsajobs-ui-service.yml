@@ -1,0 +1,17 @@
+apiVersion: v1  # Menggunakan API versi 1 untuk resource Service
+kind: Service  # Menentukan bahwa ini adalah resource Service
+
+metadata:
+  name: karsajobs-frontend  # Nama Service yang akan digunakan dalam Kubernetes
+
+spec:
+  selector:
+    app: karsajobs-frontend  # Selector untuk mencocokkan label Pod yang akan dilayani oleh Service ini
+
+  ports:
+  - protocol: TCP  # Menggunakan protokol TCP untuk komunikasi jaringan
+    port: 8000  # Port yang diekspos di dalam cluster
+    targetPort: 8000  # Port yang digunakan oleh container di dalam Pod
+    nodePort: 30020  # Port yang dapat diakses dari luar cluster
+
+  type: NodePort  # Menggunakan NodePort agar Service dapat diakses dari luar cluster melalui Node IP dan NodePort
