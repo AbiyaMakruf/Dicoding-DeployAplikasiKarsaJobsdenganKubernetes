@@ -1,12 +1,12 @@
-name: CI - Karsajobs Backend
+name: CI - Karsajobs UI
 
 on:
   push:
     branches:
-      - karsajobs
+      - karsajobs-fe
   pull_request:
     branches:
-      - karsajobs
+      - karsajobs-fe
 
 jobs:
   lint-dockerfile:
@@ -25,25 +25,10 @@ jobs:
       - name: Run Hadolint
         run: hadolint Dockerfile
 
-  test-app:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.19'
-
-      - name: Run Go Unit Tests
-        run: go test -v -short --count=1 $(go list ./...)
-
-  build-app-karsajobs:
+  build-app-karsajobs-ui:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
-    needs: [lint-dockerfile, test-app]
+    needs: [lint-dockerfile]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -52,7 +37,7 @@ jobs:
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker Image
-        run: docker build -t ghcr.io/${GITHUB_ACTOR,,}/karsajobs:latest .
+        run: docker build -t ghcr.io/${GITHUB_ACTOR,,}/karsajobs-ui:latest .
 
       - name: Push Docker Image
-        run: docker push ghcr.io/${GITHUB_ACTOR,,}/karsajobs:latest
+        run: docker push ghcr.io/${GITHUB_ACTOR,,}/karsajobs-ui:latest
